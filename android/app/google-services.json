@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "64811816764",
+    "project_id": "startupspace-78e1e",
+    "storage_bucket": "startupspace-78e1e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:64811816764:android:38698c1bc9a0890ae93039",
+        "android_client_info": {
+          "package_name": "com.example.startupspace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlyYjNAEUxpi3MwKQ6kYIiJ4S2007GGx8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
