@@ -9,6 +9,7 @@ import 'package:startupspace/presentation/home/add_proyect_2_Screen.dart';
 import 'package:startupspace/presentation/home/add_proyect_Screen.dart';
 import 'package:startupspace/presentation/home/home_Screen.dart';
 import 'package:startupspace/presentation/home/into_proyect.dart';
+import 'package:startupspace/presentation/home/notification_Screen.dart';
 import 'package:startupspace/presentation/views/profile_view.dart';
 
 final goRouterProvider = Provider((ref) {
@@ -33,6 +34,11 @@ final goRouterProvider = Provider((ref) {
       path: "/LoginScreen",
       builder: (context, state) => const LoginScreen(),
     ),
+ GoRoute(
+      path: "/NotificationScreen",
+      builder: (context, state) => const NotificationScreen(),
+    ),
+    
     GoRoute(
       path: "/OnBoardingScreen",
       builder: (context, state) => const OnBoardingScreen(),
@@ -88,7 +94,7 @@ final goRouterProvider = Provider((ref) {
         isGoingTo=="/home/2"||
           isGoingTo=="/home/3"||
         isGoingTo=="/AddProyectScreen"||isGoingTo=="/AddProyect2Screen"
-        ||isGoingTo=="/IntoProyect"
+        ||isGoingTo=="/IntoProyect"|| isGoingTo=="/NotificationScreen"
            ) return null;
         return "/home/0";
       } else {

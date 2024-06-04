@@ -1,5 +1,6 @@
 class Proyect {
-    final String id;
+  final String docid;
+  final String id;
   final String chose;
   final String descrition;
   final String github;
@@ -13,8 +14,9 @@ class Proyect {
 
   Proyect(
       {
-        required this.id,
-        required this.chose,
+      required this.docid,  
+      required this.id,
+      required this.chose,
       required this.descrition,
       required this.github,
       required this.instagram,
@@ -23,7 +25,5 @@ class Proyect {
       required this.phone,
       required this.proyectDescription,
       required this.web,
-      required this.images
-      
-      });
+      required this.images});
 }

@@ -11,9 +11,10 @@ Stream<List<Proyect>> getAllProyects() {
       .snapshots()
       .map((event) => event.docs.map((e) {
             final data = e.data();
-          
+        
             return Proyect(
-                id: e.id,
+                docid: e.id,
+                id: data["uid"]??"",
                 chose: data["chose"] ?? "",
                 descrition: data["descrition"] ?? "",
                 github: data["github"] ?? "",

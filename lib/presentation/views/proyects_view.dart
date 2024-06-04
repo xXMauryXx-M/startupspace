@@ -234,11 +234,22 @@ class ProyectsView extends ConsumerWidget {
                               ),
                             ),
                             SizedBox(height: 20),
+
                           ],
                         );
                       },
                     ),
                   ),
+      const   DottedBox(
+          width: 300,
+          height: 100,
+          color: Color(0xff282828),
+          dotColor: Colors.red,
+          dotSpacing: 4.0, // Reducir el espaciado entre los puntos
+          dotRadius: 1.0, // Reducir el radio de los puntos
+          topText: "Este podría ser tu proyecto",
+          bottomText: "Crear ahora mismo",
+        ),
                 ],
               ),
             ),
@@ -387,4 +398,105 @@ class _CustomToggleButtonsState extends State<CustomToggleButtons> {
       }
     });
   }
+}
+
+
+
+class DottedBox extends StatelessWidget {
+  final double width;
+  final double height;
+  final Color color;
+  final double dotSpacing;
+  final double dotRadius;
+  final Color dotColor;
+  final String topText;
+  final String bottomText;
+
+  const DottedBox({
+    Key? key,
+    required this.width,
+    required this.height,
+    this.color = Colors.black,
+    this.dotSpacing = 4.0, // Reducir el espaciado entre los puntos
+    this.dotRadius = 1.0, // Reducir el radio de los puntos
+    this.dotColor = Colors.white,
+    this.topText = "",
+    this.bottomText = "",
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      color: color,
+      child: Stack(
+        children: [
+          CustomPaint(
+            painter: DottedBorderPainter(
+              dotSpacing: dotSpacing,
+              dotRadius: dotRadius,
+              dotColor: dotColor,
+            ),
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  topText,
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  bottomText,
+                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                Icon(Icons.add,color: Colors.white,size: 30,)
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DottedBorderPainter extends CustomPainter {
+  final double dotSpacing;
+  final double dotRadius;
+  final Color dotColor;
+
+  DottedBorderPainter({
+    required this.dotSpacing,
+    required this.dotRadius,
+    required this.dotColor,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint = Paint()
+      ..color = dotColor
+      ..strokeWidth = 1.0;
+
+    final double horizontalDots = (size.width / dotSpacing).ceilToDouble();
+    final double verticalDots = (size.height / dotSpacing).ceilToDouble();
+
+    // Draw dots on top and bottom edges
+    for (int i = 0; i < horizontalDots; i++) {
+      final double x = i * dotSpacing;
+      canvas.drawCircle(Offset(x, 0), dotRadius, paint); // Top edge
+      canvas.drawCircle(Offset(x, size.height), dotRadius, paint); // Bottom edge
+    }
+
+    // Draw dots on left and right edges (except at the corners to avoid duplication)
+    for (int i = 1; i < verticalDots - 1; i++) {
+      final double y = i * dotSpacing;
+      canvas.drawCircle(Offset(0, y), dotRadius, paint); // Left edge
+      canvas.drawCircle(Offset(size.width, y), dotRadius, paint); // Right edge
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

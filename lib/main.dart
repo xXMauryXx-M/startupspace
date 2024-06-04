@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,9 +22,6 @@ import 'package:startupspace/firebase_options.dart';
    @override
    Widget build(BuildContext context, WidgetRef ref) {
      final approuter = ref.watch(goRouterProvider);
-     Future<void> addUser() {
-       return FirebaseFirestore.instance.collection("aa").add({"a": "a"});
-     }
  //dos o una 
  //
      return MaterialApp.router(

@@ -11,5 +11,5 @@ final proyectFirebaseProvider = StreamProvider.autoDispose<List<Proyect>>((ref) 
 });
 
 final proyectIntoProvider = StateProvider<Proyect>((ref) {
-  return Proyect( id: "", chose: "", descrition: "", github: "", instagram: "", nameproyect: "", obstaculos: "", phone: "", proyectDescription: "", web: "", images: []) ;
+  return Proyect( docid: "", id: "", chose: "", descrition: "", github: "", instagram: "", nameproyect: "", obstaculos: "", phone: "", proyectDescription: "", web: "", images: []) ;
 });

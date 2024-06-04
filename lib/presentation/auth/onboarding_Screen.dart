@@ -17,7 +17,7 @@ class OnBoardingScreen extends ConsumerWidget {
             "assets/startupspaceImage.jpg",
             width: 370,
           ),
-          const Text("Startup-Space Welcome ",
+          const Text("Startup-Space",
               style: TextStyle(
                 fontSize: 40,
                 fontWeight: FontWeight.w600,

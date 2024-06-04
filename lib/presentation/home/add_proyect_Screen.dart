@@ -1100,6 +1100,7 @@ class Contact extends ConsumerWidget {
                                               .instance.currentUser!.uid)
                                           .collection("proyects")
                                           .add({
+                                      
                                         "nameproyect": "${nameproyect}",
                                         "proyectDescription":
                                             "${proyectDescription}",
@@ -1110,7 +1111,8 @@ class Contact extends ConsumerWidget {
                                         "phone": "${phone}",
                                         "github": "${github}",
                                         "chose": chose,
-                                        "images": images
+                                        "images": images,
+                                        "uid":FirebaseAuth.instance.currentUser!.uid
                                       }).then((value) => ref
                                               .read(readyProvider.notifier)
                                               .update((state) => true));

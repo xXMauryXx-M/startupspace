@@ -9,35 +9,35 @@ import 'package:startupspace/infrastrocture/inputs/name.dart';
 import 'package:startupspace/presentation/providers/auth/auth_provider.dart';
 
 class RegisterFormState {
-   final bool isPosting;
+  final Name name;
+  final bool isPosting;
   final bool isValid;
   final Email email;
   final bool isFormPosted;
   final Password password;
 
-  RegisterFormState(
-   {
-         this.isPosting = false,
-         this.isFormPosted = false,
-         this.email = const Email.pure(),
-         this.password = const Password.pure(),
-         this.isValid = false,
+  RegisterFormState({
+    this.name=const Name.pure(),
+    this.isPosting = false,
+    this.isFormPosted = false,
+    this.email = const Email.pure(),
+    this.password = const Password.pure(),
+    this.isValid = false,
   });
 
   copywith({
-        bool? isPosting,
+    bool? isPosting,
     bool? isFormPosted,
     bool? isValid,
     Email? email,
     Password? password,
   }) =>
       RegisterFormState(
-         isPosting: isPosting ?? this.isPosting,
+          isPosting: isPosting ?? this.isPosting,
           isFormPosted: isFormPosted ?? this.isFormPosted,
           isValid: isValid ?? this.isValid,
           email: email ?? this.email,
-          password: password ?? this.password 
-  );
+          password: password ?? this.password);
 }
 
 class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
@@ -45,20 +45,20 @@ class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
   RegisterFormNotifier({required this.registerUserCallback})
       : super(RegisterFormState());
 
-
-
   onEmailChange(String value) {
     final newEmail = Email.dirty(value);
     state = state.copywith(
-        email: newEmail,
-        isValid: Formz.validate([newEmail, state.password]));
+        email: newEmail, isValid: Formz.validate([newEmail, state.password]));
   }
 
   onPasswordChange(String value) {
     final newPassword = Password.dirty(value);
     state = state.copywith(
         password: newPassword,
-        isValid: Formz.validate([newPassword, state.email,]));
+        isValid: Formz.validate([
+          newPassword,
+          state.email,
+        ]));
   }
 
   onFormSubmit(BuildContext context) async {
@@ -75,7 +75,6 @@ class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
     final password = Password.dirty(state.password.value);
 
     state = state.copywith(
-  
         isFormPosted: true,
         email: email,
         password: password,
