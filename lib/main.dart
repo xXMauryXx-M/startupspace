@@ -1,15 +1,25 @@
 
 import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:startupspace/config/router/app_router.dart';
 import 'package:startupspace/firebase_options.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler( message) async {
+    print("Manejar un mensaje de fondo: ${message.messageId}");
+  }
  void main() async {
    WidgetsFlutterBinding.ensureInitialized();
    await Firebase.initializeApp(
      options: DefaultFirebaseOptions.currentPlatform,
    );
+
+//      FirebaseMessagi.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+// //    // TODO: tiene problmea ios
+
+//    await LocalNotification.inicializeLocalNotification();
+     
    runApp(const ProviderScope(
      child: MainApp(),
    ));
