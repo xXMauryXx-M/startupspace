@@ -1,10 +1,13 @@
 
 import 'package:firebase_core/firebase_core.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:startupspace/config/local_notification/local_notification.dart';
 import 'package:startupspace/config/router/app_router.dart';
 import 'package:startupspace/firebase_options.dart';
+import 'package:startupspace/presentation/providers/permission/app_state_provider.dart';
+import 'package:startupspace/presentation/providers/permission/permission_Provider.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler( message) async {
     print("Manejar un mensaje de fondo: ${message.messageId}");
@@ -15,22 +18,52 @@ Future<void> _firebaseMessagingBackgroundHandler( message) async {
      options: DefaultFirebaseOptions.currentPlatform,
    );
 
-//      FirebaseMessagi.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+      FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 // //    // TODO: tiene problmea ios
-
-//    await LocalNotification.inicializeLocalNotification();
+    await LocalNotification.inicializeLocalNotification();
      
    runApp(const ProviderScope(
      child: MainApp(),
    ));
  }
 
- // este es una app
- class MainApp extends ConsumerWidget {
-   const MainApp({super.key});
 
-   @override
-   Widget build(BuildContext context, WidgetRef ref) {
+
+
+
+  class MainApp extends ConsumerStatefulWidget {
+    const MainApp({super.key});
+
+    @override
+    _MainAppState createState() => _MainAppState();
+  }
+
+  class _MainAppState extends ConsumerState<MainApp> with WidgetsBindingObserver {
+    @override
+    void initState() {
+      // TODO: implement initState
+      super.initState();
+      WidgetsBinding.instance.addObserver(this);
+    }
+
+    @override
+    void dispose() {
+      WidgetsBinding.instance.removeObserver(this);
+      super.dispose();
+    }
+
+    @override
+    void didChangeAppLifecycleState(AppLifecycleState state) {
+      ref.read(appstateProvider.notifier).state = state;
+      if (state == AppLifecycleState.resumed) {
+        ref.read(permissionProvider.notifier).checkPermission();
+      }
+      // TODO: implement didChangeAppLifecycleState
+      super.didChangeAppLifecycleState(state);
+    }
+
+    @override
+   Widget build(BuildContext context) {
      final approuter = ref.watch(goRouterProvider);
  //dos o una 
  //
@@ -39,7 +72,8 @@ Future<void> _firebaseMessagingBackgroundHandler( message) async {
        routerConfig: approuter,
      );
    }
- }
+  }
+  
 
 // import 'dart:async';
 // import 'dart:io' show Platform;

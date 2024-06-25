@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,12 @@ final nameProvider = StateProvider<String>((ref) {
   return "";
 });
 
+final emailProvider = StateProvider<String>((ref) {
+  return "" ;
+});
+final passwordProvider = StateProvider<String>((ref) {
+  return "" ;
+});
 class RegisterScreen extends ConsumerWidget {
   const RegisterScreen({super.key});
 
@@ -160,7 +167,7 @@ class RegisterScreen extends ConsumerWidget {
                             .read(registerformProvider.notifier)
                             .onEmailChange(value),
                         errorMessage: registerForm.isFormPosted
-                            ? registerForm.email.errorMessage
+                            ? registerForm.name.errorMessage
                             : null,
                       ))
                 ],
@@ -233,28 +240,63 @@ class RegisterScreen extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async{
                     if (registerForm.email.isValid &&
-                        registerForm.password.isValid) {
-                      FirebaseFirestore.instance
-                          .collection("users")
-                          .add({
-                            "nombre": name,
-                            "photo":image
-                            }).then((value) => {
-  ref
-                          .read(registerformProvider.notifier)
-                          .onFormSubmit(context)
-                          });
-                    
+                        registerForm.password.isValid||loading==false) {
+                            try {
+    final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: registerForm.email.value,
+      password: registerForm.password.value,
+    );
+    
+    // Obtén el UID del usuario recién creado
+    String uid = credential.user!.uid;
+    
+    // Crea el documento en Firestore con el UID como ID del documento
+    await FirebaseFirestore.instance.collection("users").doc(uid).set({
+       "name": name,
+       "colaboration" :0,
+       "inatablespace":false,
+       "showUsers":false,
+       "proyect":0,
+       "photo":image
+
+    });
+    
+  
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'weak-password') {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Contraseña muy débil")));
+    } else if (e.code == 'email-already-in-use') {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("La Cuenta ya existe")));
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text("Error del servidor: $e")));
+  }
+  // throw Exception('Error inesperado');
+                      // FirebaseFirestore.instance
+                      //     .collection("users")
+                      //     .add({"name": name, "photo": image})
+                      //     .then((value) => {
+                      //           ref
+                      //               .read(registerformProvider.notifier)
+                      //               .onFormSubmit(context)
+                      //         })
+                      //     .then((value) => {
+                      //       ref.read(imageUrlProvider.notifier).update((state) => "")
+                      //     });
+
                       // context.push("/additionalInfo");
                     } else {
-                      ref
-                          .read(registerformProvider.notifier)
-                          .onFormSubmit(context);
+                      // ref
+                      //     .read(registerformProvider.notifier)
+                      //     .onFormSubmit(context);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Credenciales no Correctas'),
+                          content: Text('Credenciales no Correctas o complete todo los campos'),
                           duration:
                               Duration(seconds: 3), // Duración del Snackbar
                         ),

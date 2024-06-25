@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -42,14 +43,7 @@ class HomeView extends StatelessWidget {
           ),
           backgroundColor: Colors.black.withOpacity(0.1),
           actions: [
-            GestureDetector(
-                onTap: () {
-                  context.push("/NotificationScreen");
-                },
-                child: Icon(
-                  Icons.message,
-                  color: Colors.white,
-                )),
+            NotificationIcon(),
             SizedBox(
               width: 20,
             )
@@ -62,12 +56,12 @@ class HomeView extends StatelessWidget {
             child: Column(
               children: [
                 // Text("Startup Space",style: TextStyle(fontSize: 30,color: Colors.white,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
-               
+
                 // Text(
                 //   "Somos una comunidad que reúne a mentes apasionadas que buscan dar vida a sus ideas Ya sea que estés en las etapas iniciales de tu proyecto, en búsqueda de colaboradores o  conectar con personas afines.",
                 //   style: TextStyle(color: Colors.grey,fontSize: 18),
                 //   ),
-             
+
 //                Text("Nuevo en Startup Space",style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
 // SizedBox(height: 20,),
                 StreamBuilder(
@@ -82,7 +76,6 @@ class HomeView extends StatelessWidget {
                       return CircularProgressIndicator();
                     }
                     if (snapshot.hasError) {
-                      
                       return Text(
                         'Error: ${snapshot.error}',
                         style: TextStyle(color: Colors.white),
@@ -105,7 +98,7 @@ class HomeView extends StatelessWidget {
                 SizedBox(
                   height: 10,
                 ),
-                 Align(
+                Align(
                     alignment: Alignment.topLeft,
                     child: Text(
                       "Proxima Meet Up",
@@ -118,7 +111,6 @@ class HomeView extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
-                
 
                 TextButton.icon(
                   onPressed: () {
@@ -177,6 +169,15 @@ class MeetupFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Uri privacypolicy = Uri.parse(
+        'https://www.google.com/maps/search/?api=1&query=-33.402067,-70.575443');
+
+    Future<void> termsandConditions() async {
+      if (!await launchUrl(privacypolicy)) {
+        throw Exception('Could not launch $privacypolicy');
+      }
+    }
+
     return StreamBuilder<DocumentSnapshot>(
       stream: FirebaseFirestore.instance
           .collection('meetups')
@@ -294,24 +295,7 @@ class MeetupFilter extends StatelessWidget {
                   ),
                   TextButton(
                       onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Ver Lugares'),
-                              content: const Text('Acá ir a Google maps'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pop(); // Cierra el modal al presionar el botón
-                                  },
-                                  child: Text('Cerrar'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                        termsandConditions();
                       },
                       child: Text("Ver lugares en Maps >",
                           style: TextStyle(
@@ -336,113 +320,111 @@ class NewProyects extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       width: 400,
       height: 120,
       child: Swiper(
-        
-     autoplay:true,
+        autoplay: true,
         itemBuilder: (BuildContext context, int index) {
           final d = data[index];
           return Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                // context.push("/IntoProyect");
-                                // ref
-                                //     .read(proyectIntoProvider.notifier)
-                                //     .update((state) => project);
-                              },
-                              child: Container(
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 3,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  // context.push("/IntoProyect");
+                  // ref
+                  //     .read(proyectIntoProvider.notifier)
+                  //     .update((state) => project);
+                },
+                child: Container(
+                  height: 100,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 3,
+                    ),
+                    color: Colors.grey[900],
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Stack(
+                    children: [
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Container(
+                              height: double.infinity,
+                              width: 60,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(21),
+                                child: FittedBox(
+                                  fit: BoxFit.cover,
+                                  child: Image.network(
+                                    "${d["images"][0]}",
                                   ),
-                                  color: Colors.grey[900],
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Container(
-                                            height: double.infinity,
-                                            width: 60,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(21),
-                                              child: FittedBox(
-                                                fit: BoxFit.cover,
-                                                child: Image.network(
-                                                  "${d["images"][0]}",
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  '${d["nameproyect"]}',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight: FontWeight.w600,
-                                                      fontSize: 20),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      top: 4.0),
-                                                  child: Text(
-                                                    "${d["proyectDescription"]}",
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Positioned(
-                                      top: 9,
-                                      right: 9,
-                                      child:
-      
-                                     
-                                      
-                                     
-                                     d["chose"]=="startup"?  Icon(
-                                        Icons.rocket,
-                                        color: Colors.white,
-                                      ):
-                                      d["chose"]=="idea"?
-                                       Icon(Icons.lightbulb,color: Colors.white,):
-                                       d["chose"]=="prototipo"?
-                                       Icon(Icons.work,color: Colors.white,):Icon(Icons.abc,color: Colors.white,),
-                                    ),
-                                  ],
                                 ),
                               ),
                             ),
-                            SizedBox(height: 20),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '${d["nameproyect"]}',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0),
+                                    child: Text(
+                                      "${d["proyectDescription"]}",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Positioned(
+                        top: 9,
+                        right: 9,
+                        child: d["chose"] == "startup"
+                            ? Icon(
+                                Icons.rocket,
+                                color: Colors.white,
+                              )
+                            : d["chose"] == "idea"
+                                ? Icon(
+                                    Icons.lightbulb,
+                                    color: Colors.white,
+                                  )
+                                : d["chose"] == "prototipo"
+                                    ? Icon(
+                                        Icons.work,
+                                        color: Colors.white,
+                                      )
+                                    : Icon(
+                                        Icons.abc,
+                                        color: Colors.white,
+                                      ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+            ],
+          );
 
-                          ],
-                        );
-                     
           // return Text(
           //   "${data["images"][0]}",
           //   style: TextStyle(color: Colors.white),
@@ -454,13 +436,94 @@ class NewProyects extends StatelessWidget {
         },
         itemCount: data.length,
         pagination: SwiperPagination(
-           builder: DotSwiperPaginationBuilder(
-          activeColor: Colors.white,
-          color: Color(0xff4C4C4C),
+          builder: DotSwiperPaginationBuilder(
+            activeColor: Colors.white,
+            color: Color(0xff4C4C4C),
+          ),
+          margin: EdgeInsets.symmetric(vertical: 0),
         ),
-          margin: EdgeInsets.symmetric(vertical: 0),),
-
       ),
     );
+  }
+}
+
+class NotificationIcon extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: GestureDetector(
+        onTap: () {
+          context.push("/NotificationScreen");
+        },
+        child: StreamBuilder<List<DocumentSnapshot>>(
+          stream: fetchNotificationsStream(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Stack(
+                children: [
+                  Icon(
+                    Icons.messenger_outline_outlined,
+                    color: Colors.white,
+                  ),
+                ],
+              );
+            } else if (snapshot.hasError) {
+              return Stack(
+                children: [
+                  Icon(
+                    Icons.messenger_outline_outlined,
+                    color: Colors.white,
+                  ),
+                ],
+              );
+            } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+              return Stack(
+                children: [
+                  const Icon(
+                    Icons.messenger_outline_outlined,
+                    color: Colors.white,
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: Container(
+                      padding: EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      constraints: BoxConstraints(
+                        minWidth: 5,
+                        minHeight: 5,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              return Stack(
+                children: [
+                  Icon(
+                    Icons.messenger_outline_outlined,
+                    color: Colors.white,
+                  ),
+                ],
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Stream<List<DocumentSnapshot>> fetchNotificationsStream() {
+    return FirebaseFirestore.instance
+        .collection("users")
+        .doc("ZyOdtJdsfvYxRzGxxeCrJPg7bk52")
+        .collection("notifications")
+        .where('seen', isEqualTo: false)
+        .snapshots()
+        .map((snapshot) => snapshot.docs);
   }
 }

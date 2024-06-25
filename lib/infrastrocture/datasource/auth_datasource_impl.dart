@@ -42,37 +42,46 @@ class AuthDatasourceImpl extends AuthDatasource {
     );
   }
 
-  @override
-  Future<UserApp> register(String email, String password, String fullName,
-      BuildContext context) async {
-    try {
-      final credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      FirebaseFirestore.instance.collection("users").add({
-        "name":"name",
-        "lasname":"lasname"
-        });
-      return UserApp(
-          uid: credential.user!.uid,
-          email: credential.user!.email!,
-          fullName: "");
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Contraseña muy devil")));
-      } else if (e.code == 'email-already-in-use') {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("La Cuenta ya existe")));
-      }
-    } catch (e) {
+ @override
+Future<UserApp> register(String email, String password, String fullName, BuildContext context) async {
+  try {
+    final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    
+    // Obtén el UID del usuario recién creado
+    String uid = credential.user!.uid;
+    
+    // Crea el documento en Firestore con el UID como ID del documento
+    await FirebaseFirestore.instance.collection("users").doc(uid).set({
+       "name": fullName,
+       "colaboration" :0,
+       "inatablespace":false,
+       "showUsers":false,
+       "proyect":false
+
+    });
+    
+    return UserApp(
+      uid: uid,
+      email: credential.user!.email!,
+      fullName: fullName,
+    );
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'weak-password') {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Error del servidor${e}")));
+          .showSnackBar(SnackBar(content: Text("Contraseña muy débil")));
+    } else if (e.code == 'email-already-in-use') {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("La Cuenta ya existe")));
     }
-    throw Exception('Error inesperado: ');
+  } catch (e) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text("Error del servidor: $e")));
   }
+  throw Exception('Error inesperado');
+}
 
   @override
   Future<UserCredential> googleLogin() async {

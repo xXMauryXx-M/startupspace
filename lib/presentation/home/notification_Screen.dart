@@ -27,7 +27,7 @@ class NotificationScreen extends ConsumerWidget {
             style: TextStyle(color: Colors.white, fontSize: 25),
           ),
         ),
-        body: SingleChildScrollView(
+        body:const SingleChildScrollView(
           child: Column(
             children: [NotificationNotSeen(), NotificationSeen()],
           ),
@@ -113,21 +113,41 @@ class _NotificationItemState extends State<NotificationItem> {
   Widget _buildNotificationText() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25),
-      child: widget.notificationData["acceptable"]
-          ? const Text(
-              "Le hemos notificado que has aceptado su solicitud y se pondrá en contacto contigo lo antes posible",
-              style: TextStyle(color: Colors.white, fontSize: 15),
-            )
-          : Text(
-              widget.notificationData['message'] ?? "",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white, fontSize: 15),
-            ),
+      child: Builder(
+        builder: (context) {
+          if (widget.notificationData['type'] == "acceptableNotification") {
+            if (widget.notificationData["acceptableNotification"] == true) {
+              return Text(
+                "${widget.notificationData["gmail"]}",
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              );
+            } else {
+              return const Text("Solicitud rechazada");
+            }
+          } else {
+            if (widget.notificationData.containsKey("acceptable") && widget.notificationData["acceptable"] == true) {
+              return const Text(
+                "Le hemos notificado que has aceptado su solicitud y se pondrá en contacto contigo lo antes posible",
+                style: TextStyle(color: Colors.white, fontSize: 15),
+              );
+            } else {
+              return Text(
+                widget.notificationData['message'] ?? "",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 15),
+              );
+            }
+          }
+        },
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    bool hasAcceptableColaboration = widget.notificationData.containsKey('acceptableColaboration') && widget.notificationData['acceptableColaboration'] is bool;
+    bool acceptableColaboration = hasAcceptableColaboration ? widget.notificationData['acceptableColaboration'] : false;
+
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -146,29 +166,32 @@ class _NotificationItemState extends State<NotificationItem> {
           borderRadius: BorderRadius.circular(26),
         ),
         width: 340,
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(5.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 CircleAvatar(
-                  radius: 30,
-                  backgroundImage:
-                      NetworkImage(widget.notificationData['photo'] ?? ""),
+                  radius: 25,
+                  backgroundImage: NetworkImage(widget.notificationData['photo'] ?? ""),
                 ),
-                SizedBox(width: 10),
-                Text(
-                  "${widget.notificationData['name']} ",
-                  style: TextStyle(color: Colors.white),
-                ),
-                Text(
-                  "${widget.notificationData["type"] == "colaborar" ? "ha solicitado colaborar  " : widget.notificationData["type"] == "feedback" ? "te ha enviado feedback" : "compatir"} ",
-                  style: TextStyle(color: Colors.grey),
-                ),
+                const SizedBox(width: 10),
+                acceptableColaboration 
+                  ? Text("nombre", style: TextStyle(color: Colors.white))
+                  : Text(
+                      widget.notificationData['name'] ?? 'No name',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                acceptableColaboration
+                  ? Text(
+  "${widget.notificationData["type"] == "colaborar" ? "ha solicitado colaborar" : widget.notificationData["type"] == "feedback" ? "te ha enviado feedback" : widget.notificationData["type"] == "acceptableColaboration" ? "solicitud aceptada" : "compartir"}",
+  style: TextStyle(color: Colors.grey),
+)
+
+                  : Text(""),
               ],
             ),
-            SizedBox(height: 8.0),
             AnimatedCrossFade(
               firstChild: Container(),
               secondChild: Column(
@@ -212,12 +235,27 @@ class _NotificationItemState extends State<NotificationItem> {
                                         ),
                                         TextButton(
                                           onPressed: () async {
+                                            //mandar una notificacion con solicitud aceptada
                                             await FirebaseFirestore.instance
                                                 .collection("users")
                                                 .doc("ZyOdtJdsfvYxRzGxxeCrJPg7bk52")
                                                 .collection("notifications")
                                                 .doc(widget.notificationId)
-                                                .update({'acceptable': true});
+                                                .update({'acceptable': true}).then(
+                                              (value) {
+                                                FirebaseFirestore.instance
+                                                    .collection("users")
+                                                    .doc("ZyOdtJdsfvYxRzGxxeCrJPg7bk52")
+                                                    .collection("notifications")
+                                                    .add({
+                                                      "seen": false,
+                                                      "type": "acceptableColaboration",
+                                                      "idrequest": widget.notificationData["uidrequest"],
+                                                      "acceptableNotification": true,
+                                                      "contact": "correo@gmail.com"
+                                                });
+                                              },
+                                            );
 
                                             setState(() {
                                               widget.notificationData['acceptable'] = true;
@@ -245,9 +283,7 @@ class _NotificationItemState extends State<NotificationItem> {
                       : SizedBox(),
                 ],
               ),
-              crossFadeState: _isExpanded
-                  ? CrossFadeState.showSecond
-                  : CrossFadeState.showFirst,
+              crossFadeState: _isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
               duration: Duration(milliseconds: 300),
             ),
           ],
@@ -273,18 +309,20 @@ class _NotificationSeenState extends ConsumerState<NotificationSeen> {
     _loadNotifications();
   }
 
-  Future<void> _loadNotifications() async {
-    final snapshot = await FirebaseFirestore.instance
-        .collection("users")
-        .doc("ZyOdtJdsfvYxRzGxxeCrJPg7bk52")
-        .collection("notifications")
-        .where('seen', isEqualTo: true)
-        .get();
+Future<void> _loadNotifications() async {
+  final snapshot = await FirebaseFirestore.instance
+      .collection("users")
+      .doc("ZyOdtJdsfvYxRzGxxeCrJPg7bk52")
+      .collection("notifications")
+      .where('seen', isEqualTo: true)
+      // .orderBy('timestamp', descending: true) // Ordenar por el campo 'timestamp' de forma descendente
+      .get();
 
-    setState(() {
-      _notifications = snapshot.docs;
-    });
-  }
+  setState(() {
+    _notifications = snapshot.docs;
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -292,20 +330,14 @@ class _NotificationSeenState extends ConsumerState<NotificationSeen> {
 
     return Column(
       children: [
-        if (_notifications == null)
-          Center(child: CircularProgressIndicator())
-        else if (_notifications.isEmpty)
-          Center(
-            child: Text(
-              "No notifications available",
-              style: TextStyle(color: Colors.white),
-            ),
+        if (_notifications.isEmpty)
+          const Center(
+            child: CircularProgressIndicator(),
           )
         else
           SingleChildScrollView(
             child: Column(
               children: [
-                // ExpandableBox(),
                 Align(
                   alignment: Alignment.topLeft,
                   child: Padding(
@@ -317,110 +349,111 @@ class _NotificationSeenState extends ConsumerState<NotificationSeen> {
                   ),
                 ),
                 SizedBox(height: 20),
-                   Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Container(
-        height: 400,
-        width: 400,
-        child: ListView.builder(
-          itemCount: _notifications.length,
-          itemBuilder: (context, index) {
-            var notification = _notifications[index];
-            var notificationData = notification;
-var notificationId = notification.id;
-            var isExpanded = expandedNotificationId == notificationId;
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Container(
+                    height: 900,
+                    width: 400,
+                    child: ListView.builder(
+                      itemCount: _notifications.length,
+                      itemBuilder: (context, index) {
+                        var notification = _notifications[index];
+                        var notificationData = notification.data() as Map<String, dynamic>;
+                        var notificationId = notification.id;
+                        var isExpanded = expandedNotificationId == notificationId;
 
-            return GestureDetector(
-              onTap: () {
-                ref.read(expandedNotificationProvider.notifier).state =
-                    isExpanded ? null : notificationId;
-              },
-              child: Container(
-                padding: EdgeInsets.all(16.0),
-                margin: EdgeInsets.only(bottom: 10),
-                decoration: BoxDecoration(
-                  color: Color(0xff2D2D2D),
-                  borderRadius: BorderRadius.circular(26),
-                ),
-                width: 340,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          "${notificationData["type"] == "feedback" ? "te ha enviado feedback" : "ha solicitado colaborar"}",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Spacer(),
-                        Icon(
-                          isExpanded ? Icons.expand_less : Icons.expand_more,
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 8.0),
-                    AnimatedCrossFade(
-                      firstChild: Container(),
-                      secondChild: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 25),
-                            child: Text(
-                              notificationData['message'] ?? "",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white, fontSize: 15),
+                        return GestureDetector(
+                          onTap: () {
+                            ref.read(expandedNotificationProvider.notifier).state =
+                                isExpanded ? null : notificationId;
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(16.0),
+                            margin: EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                              color: Color(0xff2D2D2D),
+                              borderRadius: BorderRadius.circular(26),
                             ),
-                          ),
-                          SizedBox(height: 20),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 25),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            width: 340,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    ref.read(expandedNotificationProvider.notifier).state = null;
-                                  },
-                                  child: Text(
-                                    "Cerrar",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 19,
+                                Row(
+                                  children: [
+                                    Text(
+                                      "${notificationData['name']} ",
+                                      style: TextStyle(color: Colors.white),
                                     ),
-                                  ),
+                                    Text(
+                                      "${notificationData["type"] == "feedback" ? " te ha enviado feedback" : "ha solicitado colaborar"}",
+                                      style: const TextStyle(color: Colors.grey),
+                                    ),
+                                    const Spacer(),
+                                    Icon(
+                                      isExpanded ? Icons.expand_less : Icons.expand_more,
+                                      color: Colors.white,
+                                    ),
+                                  ],
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    // Acción del botón "Aceptar"
-                                  },
-                                  child: Text(
-                                    "Aceptar",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 19,
-                                    ),
+                                SizedBox(height: 8.0),
+                                AnimatedCrossFade(
+                                  firstChild: Container(),
+                                  secondChild: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                                        child: Text(
+                                          notificationData['message'] ?? "",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(color: Colors.white, fontSize: 15),
+                                        ),
+                                      ),
+                                      SizedBox(height: 20),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                ref.read(expandedNotificationProvider.notifier).state = null;
+                                              },
+                                              child: Text(
+                                                "Cerrar",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 19,
+                                                ),
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                // Acción del botón "Aceptar"
+                                              },
+                                              child: Text(
+                                                "Aceptar",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 19,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
+                                  crossFadeState: isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                                  duration: Duration(milliseconds: 300),
                                 ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
-                      crossFadeState: isExpanded
-                          ? CrossFadeState.showSecond
-                          : CrossFadeState.showFirst,
-                      duration: Duration(milliseconds: 300),
+                        );
+                      },
                     ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    )
-  
+                  ),
+                )
               ],
             ),
           ),
@@ -428,7 +461,6 @@ var notificationId = notification.id;
     );
   }
 }
-
 class ExpandableBox extends StatefulWidget {
   @override
   _ExpandableBoxState createState() => _ExpandableBoxState();

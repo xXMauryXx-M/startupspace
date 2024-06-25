@@ -1,4 +1,3 @@
-
 import 'package:card_swiper/card_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,186 +24,6 @@ class IntoProyect extends ConsumerWidget {
     final colabmessage = ref.watch(colaborarProvider);
     final feebackmessage = ref.watch(feedbackProvider);
 
- 
-    // void _showModalBottomSheet(BuildContext context) {
-    //   showModalBottomSheet(
-    //     backgroundColor: Color(0xffEFEFEF),
-    //     context: context,
-    //     isScrollControlled: true,
-    //     builder: (BuildContext context) {
-    //       return Container(
-    //         height: MediaQuery.of(context).size.height * 0.9,
-    //         padding: EdgeInsets.all(16.0),
-    //         child: Column(
-    //           children: <Widget>[
-    //             SizedBox(height: 90),
-    //             Padding(
-    //               padding: const EdgeInsets.all(20),
-    //               child: Text(
-    //                 '¿De qué forma te gustaría aportar a este proyecto?',
-    //                 textAlign: TextAlign.center,
-    //                 style: TextStyle(
-    //                   fontSize: 20,
-    //                   fontWeight: FontWeight.bold,
-    //                 ),
-    //               ),
-    //             ),
-    //             SizedBox(height: 90), // Espacio entre el título y los botones
-    //             ElevatedButton.icon(
-    //               onPressed: () {
-    //                 showDialog(
-    //                   context: context,
-    //                   builder: (context) {
-    //                     return AlertDialog(
-    //                       title: Center(child: Text("Entrega tu Feedback")),
-    //                       content: Container(
-    //                         width: 300, // Ajusta el ancho según sea necesario
-    //                         height: 200, // Ajusta la altura según sea necesario
-    //                         child: Column(
-    //                           mainAxisSize: MainAxisSize.min,
-    //                           children: [
-    //                             Padding(
-    //                               padding: const EdgeInsets.all(
-    //                                   10), // Ajusta el padding según sea necesario
-    //                               child: CustomTextInput(
-    //                                   onChanged: (message) {
-    //                                     ref
-    //                                         .read(feedbackProvider.notifier)
-    //                                         .update((state) => message);
-    //                                   },
-    //                                   obscureText: false),
-    //                             ),
-    //                           ],
-    //                         ),
-    //                       ),
-    //                       actions: <Widget>[
-    //                         TextButton(
-    //                           child: Text('Cancelar'),
-    //                           onPressed: () {
-    //                             Navigator.of(context).pop();
-    //                           },
-    //                         ),
-    //                         TextButton(
-    //                           child: Text('Enviar'),
-    //                           onPressed: () {
-    //                             //TODO feedback
-    //                             // Acciones a realizar cuando se presiona el botón "Enviar"
-    //                             sendMessage(false, "nombre", feebackmessage,
-    //                                 "photo", "feedback");
-    //                           },
-    //                         ),
-    //                       ],
-    //                     );
-    //                   },
-    //                 );
-
-    //                 // Acciones cuando se selecciona la opción
-    //               },
-    //               icon: Icon(
-    //                 Icons.message,
-    //                 color: Colors.black,
-    //               ),
-    //               label: Text(
-    //                 'Feedback',
-    //                 style: TextStyle(color: Colors.black),
-    //               ),
-    //               style: ElevatedButton.styleFrom(
-    //                 minimumSize:
-    //                     Size(double.infinity, 50), // Ancho completo del botón
-    //               ),
-    //             ),
-    //             SizedBox(height: 30), // Espacio entre botones
-    //             ElevatedButton.icon(
-    //               onPressed: () {
-    //                 showDialog(
-    //                   context: context,
-    //                   builder: (context) {
-    //                     return AlertDialog(
-    //                       title: Center(child: Text("Mesage para colaborar")),
-    //                       content: Container(
-    //                         width: 300, // Ajusta el ancho según sea necesario
-    //                         height: 200, // Ajusta la altura según sea necesario
-    //                         child: Column(
-    //                           mainAxisSize: MainAxisSize.min,
-    //                           children: [
-    //                             Padding(
-    //                               padding: const EdgeInsets.all(
-    //                                   10), // Ajusta el padding según sea necesario
-    //                               child: CustomTextInput(
-    //                                   onChanged: (message) {
-    //                                     ref
-    //                                         .read(colaborarProvider.notifier)
-    //                                         .update((state) => message);
-    //                                     //TODO obtener colaboracion text
-    //                                   },
-    //                                   obscureText: false),
-    //                             ),
-    //                           ],
-    //                         ),
-    //                       ),
-    //                       actions: <Widget>[
-    //                         TextButton(
-    //                           child: Text('Cancelar'),
-    //                           onPressed: () {
-    //                             Navigator.of(context).pop();
-    //                           },
-    //                         ),
-    //                         TextButton(
-    //                           child: Text('Enviar'),
-    //                           onPressed: () {
-    //                             // Acciones a realizar cuando se presiona el botón "Enviar"
-    //                             sendMessage(false, "nombre", colabmessage,
-    //                                 "photo", "colaborar");
-    //                           },
-    //                         ),
-    //                       ],
-    //                     );
-    //                   },
-    //                 );
-    //               },
-    //               icon: Icon(
-    //                 Icons.developer_board,
-    //                 color: Colors.black,
-    //               ),
-    //               label:
-    //                   Text('Colaborar', style: TextStyle(color: Colors.black)),
-    //               style: ElevatedButton.styleFrom(
-    //                 minimumSize: Size(double.infinity, 50),
-    //               ),
-    //             ),
-    //             SizedBox(height: 30),
-    //             ElevatedButton.icon(
-    //               onPressed: () {
-    //                 // Acciones cuando se selecciona la opción
-    //                 Share.share('check out my website https://example.com',
-    //                         subject: 'Look what I made!')
-    //                     .then((value) => {
-    //                           sendMessage(
-    //                               true, "nombre", "", "photo", "Compartir")
-    //                         });
-    //               },
-    //               icon: Icon(
-    //                 Icons.share,
-    //                 color: Colors.black,
-    //               ),
-    //               label:
-    //                   Text('Compartir', style: TextStyle(color: Colors.black)),
-    //               style: ElevatedButton.styleFrom(
-    //                 minimumSize: Size(double.infinity, 50),
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //       );
-    //     },
-    //   );
-    // }
-
-    final images = [
-      "https://cdn.shopify.com/s/files/1/0229/0839/files/bancos_de_imagenes_gratis.jpg?v=1630420628",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1mZ60rzVBwxkvOG_7EwK4GCPTWcRHru8DWgYiJlc8QU2AHu8dbwESBrXj4j_JVG2HV9o&usqp=CAU",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsRwsIBwmJsXqJiBxL41D7IBTFeOTDTNusvNZEyono7Iko_fenXG24SBflpE6Px422-rU&usqp=CAU"
-    ];
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.grey[200],
@@ -248,7 +67,7 @@ class IntoProyect extends ConsumerWidget {
               Container(
                 color: Color(0xff373737),
                 width: 600,
-                height: 800,
+                height: 1000,
                 child: Column(
                   children: [
                     SizedBox(
@@ -303,41 +122,41 @@ class IntoProyect extends ConsumerWidget {
                     SizedBox(
                       height: 20,
                     ),
-                    // Container(
-                    //   height: 220,
-                    //   width: 300,
-                    //   decoration: BoxDecoration(
-                    //     color: Color(0xff262626),
-                    //     borderRadius:
-                    //         BorderRadius.circular(20), // Radio circular
-                    //     boxShadow: [
-                    //       BoxShadow(
-                    //         color: Colors.grey
-                    //             .withOpacity(0.1), // Color de la sombra
-                    //         spreadRadius: 5, // Radio de difusión de la sombra
-                    //         blurRadius: 7, // Radio de desenfoque de la sombra
-                    //         offset: Offset(0, 3), // Desplazamiento de la sombra
-                    //       ),
-                    //     ],
-                    //   ),
-                    //   child: Column(
-                    //     mainAxisAlignment: MainAxisAlignment.center,
-                    //     crossAxisAlignment: CrossAxisAlignment.center,
-                    //     children: [
-                    //       Text(
-                    //         "Los principales obstáculos",
-                    //         style: TextStyle(fontSize: 16, color: Colors.white),
-                    //       ),
-                    //       SizedBox(height: 10),
-                    //       Text(
-                    //         "${proyec.obstaculos}",
-                    //         style: TextStyle(fontSize: 16, color: Colors.white),
-                    //         textAlign: TextAlign.center,
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-
+                     Container(
+                       height: 220,
+                       width: 300,
+                       decoration: BoxDecoration(
+                         color: Color(0xff262626),
+                         borderRadius:
+                             BorderRadius.circular(20), // Radio circular
+                         boxShadow: [
+                           BoxShadow(
+                             color: Colors.grey
+                                 .withOpacity(0.1), // Color de la sombra
+                             spreadRadius: 5, // Radio de difusión de la sombra
+                             blurRadius: 7, // Radio de desenfoque de la sombra
+                             offset: Offset(0, 3), // Desplazamiento de la sombra
+                           ),
+                         ],
+                       ),
+                       child: Column(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         crossAxisAlignment: CrossAxisAlignment.center,
+                         children: [
+                           Text(
+                             "Los principales obstáculos",
+                             style: TextStyle(fontSize: 16, color: Colors.white),
+                           ),
+                           SizedBox(height: 10),
+                           Text(
+                             "${proyec.obstaculos}",
+                             style: TextStyle(fontSize: 16, color: Colors.white),
+                             textAlign: TextAlign.center,
+                           ),
+                         ],
+                       ),
+                     ),
+SizedBox(height: 50,),
                     SupportProject(
                       key: key,
                     ),
@@ -394,6 +213,7 @@ class IntoProyect extends ConsumerWidget {
     // );
   }
 }
+
 class SupportProject extends ConsumerStatefulWidget {
   const SupportProject({super.key});
 
@@ -404,35 +224,68 @@ class SupportProject extends ConsumerStatefulWidget {
 class _SupportProjectState extends ConsumerState<SupportProject> {
   bool showFeedbackInput = false;
   bool showCollaborateInput = false;
-  
+
+  String userName = "";
+  String photo = "";
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserName();
+  }
+
+  Future<void> fetchUserName() async {
+    try {
+      // Obtener el UID del usuario actual
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+
+      // Obtener el documento del usuario actual
+      final docSnapshot =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+      // Extraer el campo 'name' del documento
+      if (docSnapshot.exists) {
+        setState(() {
+          userName = docSnapshot.data()?['name'];
+          photo = docSnapshot.data()?["photo"];
+        });
+      }
+    } catch (e) {
+      print("Error al obtener el nombre: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-      final proyec = ref.watch(proyectIntoProvider);
+    final proyec = ref.watch(proyectIntoProvider);
     final colabmessage = ref.watch(colaborarProvider);
     final feebackmessage = ref.watch(feedbackProvider);
-  void sendMessage(
-         bool shared, String name, String message, String photo, String type) {
-       final coleccion = FirebaseFirestore.instance.collection("users");
+    void sendMessage(
+        bool shared, String name, String message, String photo, String type) {
+      final coleccion = FirebaseFirestore.instance.collection("users");
 
-       coleccion.doc(proyec.id).collection("notifications").add({
-         "type": type,
-         "compartir": shared,
-         "name": name,
-         "message": message,
-         "photo": photo,
-         "solicitud": "",
-         "date": DateTime.now(),
-         "seen": false,
-         "uidrequest": FirebaseAuth.instance.currentUser!.uid,
-         "acceptable": false
-       }).then((value) {
-         final snackbar = SnackBar(content: Text("Entregado con exito"));
-         ScaffoldMessenger.of(context).showSnackBar(snackbar);
- 
+      coleccion.doc(proyec.id).collection("notifications").add({
+        "type": type,
+        "compartir": shared,
+        "name": name,
+        "message": message,
+        "photo": photo,
+        "solicitud": "",
+        "date": DateTime.now(),
+        "seen": false,
+        "uidrequest": FirebaseAuth.instance.currentUser!.uid,
+        "acceptable": false
+      }).then((value) {
+        final snackbar = SnackBar(content: Text("Entregado con exito"));
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+         setState(() {
+                          showCollaborateInput = false;
+        showFeedbackInput = false;
+                          });
+       
+      });
+    }
 
-       });
-     }
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -449,14 +302,19 @@ class _SupportProjectState extends ConsumerState<SupportProject> {
                   SizedBox(height: 20),
                   Text(
                     "Envia tu Feedback",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff979797)),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff979797)),
                   ),
                   SizedBox(height: 20),
                   CustomText2Input(
                     hintText: "feedback",
                     onChanged: (message) {
                       // Handle feedback input change
-                      ref.read(feedbackProvider.notifier).update((state) => message);
+                      ref
+                          .read(feedbackProvider.notifier)
+                          .update((state) => message);
                     },
                     obscureText: false,
                   ),
@@ -479,7 +337,7 @@ class _SupportProjectState extends ConsumerState<SupportProject> {
                   TextButton(
                     style: TextButton.styleFrom(
                       backgroundColor: Colors.black,
-                      primary: Colors.white,
+                      foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -488,8 +346,8 @@ class _SupportProjectState extends ConsumerState<SupportProject> {
                     onPressed: () {
                       //TODO feedback
                       // Acciones a realizar cuando se presiona el botón "Enviar"
-                      // sendMessage(false, "nombre", feebackmessage,
-                      //     "photo", "feedback");
+                      sendMessage(
+                          false, userName, feebackmessage, photo, "feedback");
                     },
                   ),
                 ],
@@ -501,14 +359,19 @@ class _SupportProjectState extends ConsumerState<SupportProject> {
                       SizedBox(height: 20),
                       Text(
                         "Mensaje para colaborar",
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff979797)),
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff979797)),
                       ),
                       SizedBox(height: 20),
                       CustomText2Input(
                         hintText: "Colaborar",
                         onChanged: (message) {
                           // Handle collaborate input change
-                          ref.read(colaborarProvider.notifier).update((state) => message);
+                          ref
+                              .read(colaborarProvider.notifier)
+                              .update((state) => message);
                         },
                         obscureText: false,
                       ),
@@ -540,8 +403,8 @@ class _SupportProjectState extends ConsumerState<SupportProject> {
                         onPressed: () {
                           //TODO feedback
                           // Acciones a realizar cuando se presiona el botón "Enviar"
-                           sendMessage(false, "nombre", feebackmessage,
-                               "photo", "feedback");
+                          sendMessage(false, userName, feebackmessage, photo,
+                              "colaborar");
                         },
                       ),
                     ],
@@ -551,7 +414,8 @@ class _SupportProjectState extends ConsumerState<SupportProject> {
                       SizedBox(height: 30),
                       Text(
                         "Apoya al Proyecto",
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         "Con estas acciones apoyarás",
@@ -565,8 +429,11 @@ class _SupportProjectState extends ConsumerState<SupportProject> {
                           });
                         },
                         icon: Icon(Icons.message, color: Colors.black),
-                        label: Text('Feedback', style: TextStyle(color: Colors.black)),
-                        style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 50)),
+                        label: Text('Feedback',
+                            style: TextStyle(color: Colors.black)),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            minimumSize: Size(double.infinity, 50)),
                       ),
                       SizedBox(height: 30),
                       ElevatedButton.icon(
@@ -576,18 +443,32 @@ class _SupportProjectState extends ConsumerState<SupportProject> {
                           });
                         },
                         icon: Icon(Icons.developer_board, color: Colors.black),
-                        label: Text('Colaborar', style: TextStyle(color: Colors.black)),
-                        style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 50)),
+                        label: Text('Colaborar',
+                            style: TextStyle(color: Colors.black)),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            minimumSize: Size(double.infinity, 50)),
                       ),
                       SizedBox(height: 30),
                       ElevatedButton.icon(
                         onPressed: () {
                           // Handle share action
-                          Share.share('check out my website https://example.com', subject: 'Look what I made!');
+                         void _shareProject(BuildContext context) {
+    final RenderBox box = context.findRenderObject() as RenderBox;
+
+    Share.share(
+      '¡Mira este proyecto de startup: ${proyec.nameproyect}!\n\nDescripción: ${proyec.descrition}\n\nMás información: ${proyec.web.isEmpty? proyec.github.isEmpty :proyec.instagram.isEmpty?"":proyec.instagram}',
+      subject: 'Proyecto de Startup: ${proyec.nameproyect}',
+      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+    );
+  }
                         },
                         icon: Icon(Icons.share, color: Colors.black),
-                        label: Text('Compartir', style: TextStyle(color: Colors.black)),
-                        style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 50)),
+                        label: Text('Compartir',
+                            style: TextStyle(color: Colors.black)),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            minimumSize: Size(double.infinity, 50)),
                       ),
                     ],
                   ),
@@ -595,7 +476,6 @@ class _SupportProjectState extends ConsumerState<SupportProject> {
     );
   }
 }
-
 
 class CustomText2Input extends StatelessWidget {
   final Function(String) onChanged;

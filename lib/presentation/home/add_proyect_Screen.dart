@@ -624,62 +624,92 @@ class Face3 extends ConsumerWidget {
                           ),
                           const SizedBox(height: 10),
                           Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.grey[200],
+                            ),
                             height: 90,
-                            color: Colors.grey[200],
+                            width: 240,
                             child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: isload? Text("Cargando...") :
-                        Row(
-  mainAxisSize: MainAxisSize.min,
-  children: [
-    images.isEmpty ? SizedBox(width: 10) : SizedBox(),
-    images.isEmpty ? Text("Imágenes") : SizedBox(),
-    images.isEmpty ? SizedBox(width: 20) : SizedBox(),
-    if (images.isNotEmpty)
-      Container(
-        width: 300,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: images.length,
-          itemBuilder: (context, index) {
-            final imageUrl = ref.watch(imageProvider)[index];
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20,),
-              child: Row(
-                children: [
-                  Container(
-                    height: 80,
-                    width: 80, // Ajusta el ancho según tus necesidades
-                    child: Image.network(
-                      imageUrl,
-                      fit: BoxFit.cover, // Para ajustar la imagen al contenedor
-                    ),
-                  ),
-                   if (index == 0) ...[
-                    SizedBox(width: 10), // Espacio adicional antes del separador
-                    Container(
-                      width: 2, // Ancho del separador
-                      color: Colors.grey[400], // Puede cambiar el color si lo deseas
-                    ),
-                  ],
-                ],
-              ),
-            );
-          },
-        ),
-      ),
-    SizedBox(width: 20),
-    images.isEmpty
-        ? GestureDetector(
-            onTap: () async {
-              await pickAndUploadImages(context, ref);
-            },
-            child: Icon(Icons.upload),
-          )
-        : SizedBox(),
-  ],
-)
-   ),
+                                scrollDirection: Axis.horizontal,
+                                child: isload
+                                    ? Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 40),
+                                        child: Center(
+                                            child: Text(
+                                          "Cargando...",
+                                          textAlign: TextAlign.center,
+                                        )),
+                                      )
+                                    : Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          images.isEmpty
+                                              ? SizedBox(width: 10)
+                                              : SizedBox(),
+                                          images.isEmpty
+                                              ? Text("Imágenes")
+                                              : SizedBox(),
+                                          images.isEmpty
+                                              ? SizedBox(width: 20)
+                                              : SizedBox(),
+                                          if (images.isNotEmpty)
+                                            Container(
+                                              width: 600,
+                                              child: ListView.builder(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount: images.length,
+                                                itemBuilder: (context, index) {
+                                                  final imageUrl = ref.watch(
+                                                      imageProvider)[index];
+                                                  return Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                      horizontal: 20,
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        Container(
+                                                          height: 80,
+                                                          width:
+                                                              80, // Ajusta el ancho según tus necesidades
+                                                          child: Image.network(
+                                                            imageUrl,
+                                                            fit: BoxFit
+                                                                .cover, // Para ajustar la imagen al contenedor
+                                                          ),
+                                                        ),
+                                                        if (index == 0) ...[
+                                                          SizedBox(
+                                                              width:
+                                                                  10), // Espacio adicional antes del separador
+                                                          Container(
+                                                            width:
+                                                                2, // Ancho del separador
+                                                            color: Colors.grey[
+                                                                400], // Puede cambiar el color si lo deseas
+                                                          ),
+                                                        ],
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          SizedBox(width: 80),
+                                          images.isEmpty
+                                              ? GestureDetector(
+                                                  onTap: () async {
+                                                    await pickAndUploadImages(
+                                                        context, ref);
+                                                  },
+                                                  child: Icon(Icons.upload),
+                                                )
+                                              : SizedBox(),
+                                        ],
+                                      )),
                           ),
                           SizedBox(height: 30),
                           Row(
@@ -712,7 +742,8 @@ class Face3 extends ConsumerWidget {
                                   child: GestureDetector(
                                     onTap: () {
                                       if (description.isEmpty ||
-                                          obstaculos.isEmpty) {
+                                          obstaculos.isEmpty ||
+                                          images.isEmpty) {
                                         final snackbar = SnackBar(
                                             content: Text(
                                                 "Debes completar todos los campos"));
@@ -729,7 +760,11 @@ class Face3 extends ConsumerWidget {
                                       children: [
                                         Icon(
                                           Icons.arrow_forward,
-                                          color: Colors.grey,
+                                          color: description.isEmpty ||
+                                                  obstaculos.isEmpty ||
+                                                  images.isEmpty
+                                              ? Colors.grey
+                                              : Colors.black,
                                         ),
                                         SizedBox(height: 20),
                                         Text("Paso 2 de 3"),
@@ -1100,7 +1135,6 @@ class Contact extends ConsumerWidget {
                                               .instance.currentUser!.uid)
                                           .collection("proyects")
                                           .add({
-                                      
                                         "nameproyect": "${nameproyect}",
                                         "proyectDescription":
                                             "${proyectDescription}",
@@ -1112,14 +1146,14 @@ class Contact extends ConsumerWidget {
                                         "github": "${github}",
                                         "chose": chose,
                                         "images": images,
-                                        "uid":FirebaseAuth.instance.currentUser!.uid
+                                        "uid": FirebaseAuth
+                                            .instance.currentUser!.uid
                                       }).then((value) => ref
                                               .read(readyProvider.notifier)
                                               .update((state) => true));
+                               
                                     });
-                                    ref
-                                        .read(theLastScreen.notifier)
-                                        .update((state) => true);
+
                                     //un future.delay
 
                                     //aca subir toda la info
@@ -1210,12 +1244,56 @@ class FinalScreen extends ConsumerWidget {
                   SizedBox(
                     height: 40,
                   ),
+                  isReady
+                      ? SizedBox()
+                      : Center(
+                          child: LinearProgressIndicator(
+                            color: Colors.black,
+                          ),
+                        ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: isReady
                         ? GestureDetector(
                             onTap: () {
-                              context.push("/IntoProyect");
+                              context.push("/home/1");
+                                     ref
+                                          .read(theLastScreen.notifier)
+                                          .update((state) => true);
+
+                                      ref
+                                          .read(nameProyectProvider.notifier)
+                                          .update((state) => "");
+                                       ref
+                                           .read(passNextProvider.notifier)
+                                           .update((state) => false);
+                                       ref
+                                           .read(passNextFace3Provider.notifier)
+                                           .update((state) => false);
+                                       ref
+                                           .read(passNextContactProvider.notifier)
+                                           .update((state) => false);
+                                       ref
+                                           .read(choseProvider.notifier)
+                                           .update((state) => "");
+                                       ref
+                                           .read(
+                                               descriptionProyectProvider.notifier)
+                                           .update((state) => "");
+                                       ref
+                                           .read(onedresriptionProyectProvider
+                                               .notifier)
+                                           .update((state) => "");
+                                       ref
+                                           .read(
+                                               oobstaculosProyectProvider.notifier)
+                                           .update((state) => "");
+                                       ref
+                                           .read(imageProvider.notifier)
+                                           .update((state) => []);
                             },
                             child: RichText(
                                 text: TextSpan(
@@ -1249,7 +1327,40 @@ class FinalScreen extends ConsumerWidget {
                   ),
                   GestureDetector(
                       onTap: () {
-                        context.pop();
+                              ref
+                                          .read(theLastScreen.notifier)
+                                          .update((state) => true);
+
+                                      ref
+                                          .read(nameProyectProvider.notifier)
+                                          .update((state) => "");
+                                       ref
+                                           .read(passNextProvider.notifier)
+                                           .update((state) => false);
+                                       ref
+                                           .read(passNextFace3Provider.notifier)
+                                           .update((state) => false);
+                                       ref
+                                           .read(passNextContactProvider.notifier)
+                                           .update((state) => false);
+                                       ref
+                                           .read(choseProvider.notifier)
+                                           .update((state) => "");
+                                       ref
+                                           .read(
+                                               descriptionProyectProvider.notifier)
+                                           .update((state) => "");
+                                       ref
+                                           .read(onedresriptionProyectProvider
+                                               .notifier)
+                                           .update((state) => "");
+                                       ref
+                                           .read(
+                                               oobstaculosProyectProvider.notifier)
+                                           .update((state) => "");
+                                       ref
+                                           .read(imageProvider.notifier)
+                                           .update((state) => []);
                       },
                       child: Text(
                         "o volver al inicio",

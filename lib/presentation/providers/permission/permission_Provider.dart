@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:ufoni/config/local_notification/local_notification.dart';
+import 'package:startupspace/config/local_notification/local_notification.dart';
 
 final permissionProvider =
     StateNotifierProvider<PermissionNotifier, PermissionState>((ref) {
@@ -63,8 +63,8 @@ class PermissionNotifier extends StateNotifier<PermissionState> {
     if (message.notification == null) return;
     LocalNotification.showLocalNotification(
         id: ++pushid,
-        title: "OVNI Reportado",
-        body: "¡Un OVNI ha sido avistado por la comunidad!",
+        title: "Nuevo Espacio Startup Space",
+        body: "¡Se habre un Nuevo espacio en Startup Space esta semana!",
         data: "data");
   }
 

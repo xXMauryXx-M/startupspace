@@ -12,24 +12,29 @@ class ProfileView extends StatelessWidget {
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection("users")
-              .doc("ZyOdtJdsfvYxRzGxxeCrJPg7bk52")
+              .doc(FirebaseAuth.instance.currentUser!.uid)
               .snapshots(),
           builder: (context, snapshot) {
-    
-      if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
-        
-        if (snapshot.hasError) {
-          return Center(child: Text("Error: ${snapshot.error}"));
-        }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: Colors.black,
+                ),
+              );
+            }
 
-        if (!snapshot.hasData || !snapshot.data!.exists) {
-          return Center(child: Text("No data available"));
-        }
+            if (snapshot.hasError) {
+              return Center(child: Text("Error: ${snapshot.error}"));
+            }
 
-        var userData = snapshot.data!.data() as Map<String, dynamic>;
-      
+            if (!snapshot.hasData || !snapshot.data!.exists) {
+              return Center(
+                  child: Text(
+                      "No data available${FirebaseAuth.instance.currentUser!.uid}"));
+            }
+
+            var userData = snapshot.data!.data() as Map<String, dynamic>;
+
             return Column(
               children: [
                 const SizedBox(

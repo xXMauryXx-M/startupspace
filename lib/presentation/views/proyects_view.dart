@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -240,16 +242,7 @@ class ProyectsView extends ConsumerWidget {
                       },
                     ),
                   ),
-      const   DottedBox(
-          width: 300,
-          height: 100,
-          color: Color(0xff282828),
-          dotColor: Colors.red,
-          dotSpacing: 4.0, // Reducir el espaciado entre los puntos
-          dotRadius: 1.0, // Reducir el radio de los puntos
-          topText: "Este podría ser tu proyecto",
-          bottomText: "Crear ahora mismo",
-        ),
+  
                 ],
               ),
             ),
@@ -500,3 +493,5 @@ class DottedBorderPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
+
+
