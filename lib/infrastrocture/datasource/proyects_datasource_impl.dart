@@ -13,6 +13,7 @@ Stream<List<Proyect>> getAllProyects() {
             final data = e.data();
         
             return Proyect(
+           date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
                 docid: e.id,
                 id: data["uid"]??"",
                 chose: data["chose"] ?? "",

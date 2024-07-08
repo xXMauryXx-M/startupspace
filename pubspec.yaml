@@ -37,9 +37,28 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/iconapp.jpg"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+
+
+flutter_native_splash:
+  android: true
+  ios: true
+  color: "#313131" # Set white background color (assuming you want this)
+  # branding: assets/icon/Migu.png # Path to your app icon (assuming this is correct)
+  # android_gravity: center # Center the image on Android (assuming you want this)
+  # ios_content_mode: center
+  image: "assets/icon/iconapp.jpg"
 flutter:
   uses-material-design: true
-
+  
   assets:
     - assets/
+    - assets/icon/
     - assets/RiveAssets/
+

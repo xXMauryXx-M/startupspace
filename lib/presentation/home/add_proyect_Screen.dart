@@ -1110,23 +1110,9 @@ class Contact extends ConsumerWidget {
                                 alignment: Alignment.topLeft,
                                 child: GestureDetector(
                                   onTap: () {
-                                    // FirebaseFirestore.instance
-                                    //     .collection("users")
-                                    //     .doc(FirebaseAuth
-                                    //         .instance.currentUser!.uid)
-                                    //     .collection("proyects")
-                                    //     .add({
-                                    //   "nameproyect": "${nameproyect}",
-                                    //   "proyectDescription":
-                                    //       "${proyectDescription}",
-                                    //   "descrition": "${descrition}",
-                                    //   "obstaculos": "${obstaculos}",
-                                    //   "web": "${web}",
-                                    //   "instagram": "${instagram}",
-                                    //   "phone": "${phone}",
-                                    //   "github": "${github}",
-                                    //   "chose": chose
-                                    // });
+                                    ref
+                                        .read(theLastScreen.notifier)
+                                        .update((state) => true);
                                     Future.delayed(
                                         const Duration(milliseconds: 4000), () {
                                       FirebaseFirestore.instance
@@ -1135,6 +1121,7 @@ class Contact extends ConsumerWidget {
                                               .instance.currentUser!.uid)
                                           .collection("proyects")
                                           .add({
+                                        "date": DateTime.now(),
                                         "nameproyect": "${nameproyect}",
                                         "proyectDescription":
                                             "${proyectDescription}",
@@ -1151,8 +1138,15 @@ class Contact extends ConsumerWidget {
                                       }).then((value) => ref
                                               .read(readyProvider.notifier)
                                               .update((state) => true));
-                               
-                                    });
+                                    }).then((value) => {
+                                          FirebaseFirestore.instance
+                                              .collection("users")
+                                              .doc(FirebaseAuth
+                                                  .instance.currentUser!.uid)
+                                              .update({
+                                            "proyect": FieldValue.increment(1)
+                                          })
+                                        });
 
                                     //un future.delay
 
@@ -1260,40 +1254,37 @@ class FinalScreen extends ConsumerWidget {
                         ? GestureDetector(
                             onTap: () {
                               context.push("/home/1");
-                                     ref
-                                          .read(theLastScreen.notifier)
-                                          .update((state) => true);
+                              ref
+                                  .read(theLastScreen.notifier)
+                                  .update((state) => true);
 
-                                      ref
-                                          .read(nameProyectProvider.notifier)
-                                          .update((state) => "");
-                                       ref
-                                           .read(passNextProvider.notifier)
-                                           .update((state) => false);
-                                       ref
-                                           .read(passNextFace3Provider.notifier)
-                                           .update((state) => false);
-                                       ref
-                                           .read(passNextContactProvider.notifier)
-                                           .update((state) => false);
-                                       ref
-                                           .read(choseProvider.notifier)
-                                           .update((state) => "");
-                                       ref
-                                           .read(
-                                               descriptionProyectProvider.notifier)
-                                           .update((state) => "");
-                                       ref
-                                           .read(onedresriptionProyectProvider
-                                               .notifier)
-                                           .update((state) => "");
-                                       ref
-                                           .read(
-                                               oobstaculosProyectProvider.notifier)
-                                           .update((state) => "");
-                                       ref
-                                           .read(imageProvider.notifier)
-                                           .update((state) => []);
+                              ref
+                                  .read(nameProyectProvider.notifier)
+                                  .update((state) => "");
+                              ref
+                                  .read(passNextProvider.notifier)
+                                  .update((state) => false);
+                              ref
+                                  .read(passNextFace3Provider.notifier)
+                                  .update((state) => false);
+                              ref
+                                  .read(passNextContactProvider.notifier)
+                                  .update((state) => false);
+                              ref
+                                  .read(choseProvider.notifier)
+                                  .update((state) => "");
+                              ref
+                                  .read(descriptionProyectProvider.notifier)
+                                  .update((state) => "");
+                              ref
+                                  .read(onedresriptionProyectProvider.notifier)
+                                  .update((state) => "");
+                              ref
+                                  .read(oobstaculosProyectProvider.notifier)
+                                  .update((state) => "");
+                              ref
+                                  .read(imageProvider.notifier)
+                                  .update((state) => []);
                             },
                             child: RichText(
                                 text: TextSpan(
@@ -1327,40 +1318,33 @@ class FinalScreen extends ConsumerWidget {
                   ),
                   GestureDetector(
                       onTap: () {
-                              ref
-                                          .read(theLastScreen.notifier)
-                                          .update((state) => true);
+                        ref
+                            .read(theLastScreen.notifier)
+                            .update((state) => true);
 
-                                      ref
-                                          .read(nameProyectProvider.notifier)
-                                          .update((state) => "");
-                                       ref
-                                           .read(passNextProvider.notifier)
-                                           .update((state) => false);
-                                       ref
-                                           .read(passNextFace3Provider.notifier)
-                                           .update((state) => false);
-                                       ref
-                                           .read(passNextContactProvider.notifier)
-                                           .update((state) => false);
-                                       ref
-                                           .read(choseProvider.notifier)
-                                           .update((state) => "");
-                                       ref
-                                           .read(
-                                               descriptionProyectProvider.notifier)
-                                           .update((state) => "");
-                                       ref
-                                           .read(onedresriptionProyectProvider
-                                               .notifier)
-                                           .update((state) => "");
-                                       ref
-                                           .read(
-                                               oobstaculosProyectProvider.notifier)
-                                           .update((state) => "");
-                                       ref
-                                           .read(imageProvider.notifier)
-                                           .update((state) => []);
+                        ref
+                            .read(nameProyectProvider.notifier)
+                            .update((state) => "");
+                        ref
+                            .read(passNextProvider.notifier)
+                            .update((state) => false);
+                        ref
+                            .read(passNextFace3Provider.notifier)
+                            .update((state) => false);
+                        ref
+                            .read(passNextContactProvider.notifier)
+                            .update((state) => false);
+                        ref.read(choseProvider.notifier).update((state) => "");
+                        ref
+                            .read(descriptionProyectProvider.notifier)
+                            .update((state) => "");
+                        ref
+                            .read(onedresriptionProyectProvider.notifier)
+                            .update((state) => "");
+                        ref
+                            .read(oobstaculosProyectProvider.notifier)
+                            .update((state) => "");
+                        ref.read(imageProvider.notifier).update((state) => []);
                       },
                       child: Text(
                         "o volver al inicio",

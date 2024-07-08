@@ -117,6 +117,8 @@ class ProyectsView extends ConsumerWidget {
             ? data
             : data.where((project) => project.chose == filter).toList();
 
+        filteredProjects.sort((a, b) => b.date.compareTo(a.date));
+
         return Scaffold(
           backgroundColor: Colors.black.withOpacity(0.8),
           body: SingleChildScrollView(
@@ -124,12 +126,41 @@ class ProyectsView extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 70),
               child: Column(
                 children: [
-               const   Align( alignment: Alignment.bottomLeft, child: Padding(
-                    padding:  EdgeInsets.symmetric(horizontal: 30),
-                    child: Text("Proyectos",style: TextStyle(fontSize: 28,color: Colors.white,fontWeight: FontWeight.w700),),
-                  )),
-                const  SizedBox(height: 25),
-                 const Padding(
+                  Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 30),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Proyectos",
+                              style: TextStyle(
+                                  fontSize: 28,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            Spacer(),
+                            GestureDetector(
+                                onTap: () {
+                                showDialog(
+  context: context,
+  builder: (context) {
+    return const AlertDialog(
+      title: Text("Visualiza y Colabora en Proyectos"),
+      content: Text("Explora los proyectos en Startup Space, descubre cómo puedes colaborar y deja tu feedback."),
+    );
+  },
+);
+                                },
+                                child: Icon(
+                                  Icons.help_rounded,
+                                  color: Colors.white,
+                                ))
+                          ],
+                        ),
+                      )),
+                  const SizedBox(height: 25),
+                  const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: FilterBar(
                       options: ["todo", "idea", "startup", "prototipo"],
@@ -139,7 +170,7 @@ class ProyectsView extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: ListView.builder(
                       shrinkWrap: true,
-                      physics:const NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: filteredProjects.length,
                       itemBuilder: (context, index) {
                         final project = filteredProjects[index];
@@ -197,12 +228,14 @@ class ProyectsView extends ConsumerWidget {
                                                   '${project.nameproyect}',
                                                   style: TextStyle(
                                                       color: Colors.white,
-                                                      fontWeight: FontWeight.w600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                       fontSize: 20),
                                                 ),
                                                 Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      top: 4.0),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 4.0),
                                                   child: Text(
                                                     "${project.proyectDescription}",
                                                     style: TextStyle(
@@ -218,31 +251,36 @@ class ProyectsView extends ConsumerWidget {
                                     Positioned(
                                       top: 9,
                                       right: 9,
-                                      child:
-      
-                                     
-                                      
-                                     project.chose=="startup"?  Icon(
-                                        Icons.rocket,
-                                        color: Colors.white,
-                                      ):
-                                      project.chose=="idea"?
-                                       Icon(Icons.lightbulb,color: Colors.white,):
-                                       project.chose=="prototipo"?
-                                       Icon(Icons.work,color: Colors.white,):Icon(Icons.abc,color: Colors.white,),
+                                      child: project.chose == "Startup"
+                                          ? Icon(
+                                              Icons.rocket,
+                                              color: Colors.white,
+                                            )
+                                          : project.chose == "idea"
+                                              ? Icon(
+                                                  Icons.lightbulb,
+                                                  color: Colors.white,
+                                                )
+                                              : project.chose == "prototipo"
+                                                  ? Icon(
+                                                      Icons.work,
+                                                      color: Colors.white,
+                                                    )
+                                                  : Icon(
+                                                      Icons.abc,
+                                                      color: Colors.white,
+                                                    ),
                                     ),
                                   ],
                                 ),
                               ),
                             ),
                             SizedBox(height: 20),
-
                           ],
                         );
                       },
                     ),
                   ),
-  
                 ],
               ),
             ),
@@ -393,8 +431,6 @@ class _CustomToggleButtonsState extends State<CustomToggleButtons> {
   }
 }
 
-
-
 class DottedBox extends StatelessWidget {
   final double width;
   final double height;
@@ -443,9 +479,16 @@ class DottedBox extends StatelessWidget {
                 SizedBox(height: 16),
                 Text(
                   bottomText,
-                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
                 ),
-                Icon(Icons.add,color: Colors.white,size: 30,)
+                Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 30,
+                )
               ],
             ),
           ),
@@ -479,7 +522,8 @@ class DottedBorderPainter extends CustomPainter {
     for (int i = 0; i < horizontalDots; i++) {
       final double x = i * dotSpacing;
       canvas.drawCircle(Offset(x, 0), dotRadius, paint); // Top edge
-      canvas.drawCircle(Offset(x, size.height), dotRadius, paint); // Bottom edge
+      canvas.drawCircle(
+          Offset(x, size.height), dotRadius, paint); // Bottom edge
     }
 
     // Draw dots on left and right edges (except at the corners to avoid duplication)
@@ -493,5 +537,3 @@ class DottedBorderPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
-
-

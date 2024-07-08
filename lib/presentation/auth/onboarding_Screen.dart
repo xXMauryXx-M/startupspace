@@ -13,10 +13,10 @@ class OnBoardingScreen extends ConsumerWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            "assets/startupspaceImage.jpg",
-            width: 370,
-          ),
+            Image.asset(
+              "assets/startupspaceImage.jpg",
+         
+            ),
           const Text("Startup-Space",
               style: TextStyle(
                 fontSize: 40,
@@ -27,7 +27,7 @@ class OnBoardingScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: const Text(
-                "Unete A startup space, una comunidad para las startup , accede a beneficios, como co-work eventos y mas  ",
+                "Un espacio para fomentar la creacion de startup",
                 style: TextStyle(fontSize: 17),
                 textAlign: TextAlign.center),
           ),

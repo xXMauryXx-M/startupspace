@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:startupspace/presentation/providers/auth/proyects/proyects_repository_provider.dart';
 
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final colaborarProvider = StateProvider<String>((ref) {
   return "";
@@ -24,6 +25,25 @@ class IntoProyect extends ConsumerWidget {
     final colabmessage = ref.watch(colaborarProvider);
     final feebackmessage = ref.watch(feedbackProvider);
 
+    final Uri privacypolicy = Uri.parse(
+        'https://www.google.com/maps/search/?api=1&query=-33.402067,-70.575443');
+
+    Future<void> launchUrls(Uri url) async {
+      if (!await launchUrl(url)) {
+        throw Exception('Could not launch $privacypolicy');
+      }
+      launchUrl(url);
+    }
+
+    String getUrl() {
+      if (proyec.instagram.isNotEmpty) {
+        return proyec.instagram;
+      } else {
+        return "";
+      }
+    }
+
+    String url = getUrl();
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.grey[200],
@@ -54,7 +74,7 @@ class IntoProyect extends ConsumerWidget {
                   itemBuilder: (BuildContext context, int index) {
                     return Image.network(
                       proyec.images[index],
-                      fit: BoxFit.fill,
+                      fit: BoxFit.contain,
                     );
                   },
                   itemCount: proyec.images.length,
@@ -73,15 +93,18 @@ class IntoProyect extends ConsumerWidget {
                     SizedBox(
                       height: 30,
                     ),
-                    FilledButton(
-                        style: FilledButton.styleFrom(
-                          backgroundColor: Color(0xffE3E3E3),
-                        ),
-                        onPressed: () {},
-                        child: Text(
-                          "Probar >",
-                          style: TextStyle(color: Colors.black),
-                        )),
+                    url != ""
+                        ? ElevatedButton(
+                            onPressed: () => launchUrls(Uri.parse(url)),
+                            child: Text('Probar >'),
+                          )
+                        : ElevatedButton(
+                            onPressed: () => {},
+                            child: Text(
+                              'Próximamente',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
                     SizedBox(
                       height: 30,
                     ),
@@ -122,41 +145,43 @@ class IntoProyect extends ConsumerWidget {
                     SizedBox(
                       height: 20,
                     ),
-                     Container(
-                       height: 220,
-                       width: 300,
-                       decoration: BoxDecoration(
-                         color: Color(0xff262626),
-                         borderRadius:
-                             BorderRadius.circular(20), // Radio circular
-                         boxShadow: [
-                           BoxShadow(
-                             color: Colors.grey
-                                 .withOpacity(0.1), // Color de la sombra
-                             spreadRadius: 5, // Radio de difusión de la sombra
-                             blurRadius: 7, // Radio de desenfoque de la sombra
-                             offset: Offset(0, 3), // Desplazamiento de la sombra
-                           ),
-                         ],
-                       ),
-                       child: Column(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                         crossAxisAlignment: CrossAxisAlignment.center,
-                         children: [
-                           Text(
-                             "Los principales obstáculos",
-                             style: TextStyle(fontSize: 16, color: Colors.white),
-                           ),
-                           SizedBox(height: 10),
-                           Text(
-                             "${proyec.obstaculos}",
-                             style: TextStyle(fontSize: 16, color: Colors.white),
-                             textAlign: TextAlign.center,
-                           ),
-                         ],
-                       ),
-                     ),
-SizedBox(height: 50,),
+                    Container(
+                      height: 220,
+                      width: 300,
+                      decoration: BoxDecoration(
+                        color: Color(0xff262626),
+                        borderRadius:
+                            BorderRadius.circular(20), // Radio circular
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey
+                                .withOpacity(0.1), // Color de la sombra
+                            spreadRadius: 5, // Radio de difusión de la sombra
+                            blurRadius: 7, // Radio de desenfoque de la sombra
+                            offset: Offset(0, 3), // Desplazamiento de la sombra
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Los principales obstáculos",
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            "${proyec.obstaculos}",
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
                     SupportProject(
                       key: key,
                     ),
@@ -260,6 +285,29 @@ class _SupportProjectState extends ConsumerState<SupportProject> {
     final proyec = ref.watch(proyectIntoProvider);
     final colabmessage = ref.watch(colaborarProvider);
     final feebackmessage = ref.watch(feedbackProvider);
+
+    void _shareProject(BuildContext context) {
+      final RenderBox box = context.findRenderObject() as RenderBox;
+
+      String moreInfo;
+
+      if (proyec.web.isNotEmpty) {
+        moreInfo = proyec.web;
+      } else if (proyec.github.isNotEmpty) {
+        moreInfo = proyec.github;
+      } else if (proyec.instagram.isNotEmpty) {
+        moreInfo = proyec.instagram;
+      } else {
+        moreInfo = "App no lanzada";
+      }
+
+      Share.share(
+        '¡Mira este proyecto de startup space: ${proyec.nameproyect}!\n\nDescripción: ${proyec.descrition}\n\nMás información: $moreInfo',
+        subject: 'Proyecto de Startup: ${proyec.nameproyect}',
+        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+      );
+    }
+
     void sendMessage(
         bool shared, String name, String message, String photo, String type) {
       final coleccion = FirebaseFirestore.instance.collection("users");
@@ -278,11 +326,18 @@ class _SupportProjectState extends ConsumerState<SupportProject> {
       }).then((value) {
         final snackbar = SnackBar(content: Text("Entregado con exito"));
         ScaffoldMessenger.of(context).showSnackBar(snackbar);
-         setState(() {
-                          showCollaborateInput = false;
-        showFeedbackInput = false;
-                          });
-       
+        setState(() {
+          showCollaborateInput = false;
+          showFeedbackInput = false;
+        });
+      }).then((value) => {
+
+          FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update(
+            {
+              "colaboration":FieldValue.increment(1)
+            }
+          )
+        
       });
     }
 
@@ -403,7 +458,7 @@ class _SupportProjectState extends ConsumerState<SupportProject> {
                         onPressed: () {
                           //TODO feedback
                           // Acciones a realizar cuando se presiona el botón "Enviar"
-                          sendMessage(false, userName, feebackmessage, photo,
+                          sendMessage(false, userName, colabmessage, photo,
                               "colaborar");
                         },
                       ),
@@ -453,15 +508,7 @@ class _SupportProjectState extends ConsumerState<SupportProject> {
                       ElevatedButton.icon(
                         onPressed: () {
                           // Handle share action
-                         void _shareProject(BuildContext context) {
-    final RenderBox box = context.findRenderObject() as RenderBox;
-
-    Share.share(
-      '¡Mira este proyecto de startup: ${proyec.nameproyect}!\n\nDescripción: ${proyec.descrition}\n\nMás información: ${proyec.web.isEmpty? proyec.github.isEmpty :proyec.instagram.isEmpty?"":proyec.instagram}',
-      subject: 'Proyecto de Startup: ${proyec.nameproyect}',
-      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
-    );
-  }
+                          _shareProject(context);
                         },
                         icon: Icon(Icons.share, color: Colors.black),
                         label: Text('Compartir',

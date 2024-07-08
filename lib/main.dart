@@ -21,7 +21,7 @@ Future<void> _firebaseMessagingBackgroundHandler( message) async {
       FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 // //    // TODO: tiene problmea ios
     await LocalNotification.inicializeLocalNotification();
-     
+   
    runApp(const ProviderScope(
      child: MainApp(),
    ));

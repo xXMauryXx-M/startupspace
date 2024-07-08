@@ -130,12 +130,13 @@ class LoginScreen extends ConsumerWidget {
                       width: 320,
                       height: 60,
                       child: CustomTextInput(
+                        obscureText: true,
                         onChanged: (p0) {
                           ref
                               .read(passwordProvider.notifier)
                               .update((state) => p0);
                         },
-                        obscureText: false,
+                      
                         label: "Beatriz",
                         hint: "Enter Password",
                       ))
@@ -205,7 +206,7 @@ class LoginScreen extends ConsumerWidget {
                   style: FilledButton.styleFrom(
                     backgroundColor: Colors.black,
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 130, vertical: 20),
+                        horizontal: 120, vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),

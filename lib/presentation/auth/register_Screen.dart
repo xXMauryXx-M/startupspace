@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -87,7 +86,7 @@ class RegisterScreen extends ConsumerWidget {
                     //s
                   },
                   child: loading
-                      ? CircularProgressIndicator()
+                      ? const CircularProgressIndicator()
                       : image.isEmpty
                           ? const UserIconWithAddButton(
                               addButtonColor: Color(0xff00cdac),
@@ -98,35 +97,35 @@ class RegisterScreen extends ConsumerWidget {
                                 image,
                               ),
                             )),
-              Text(
+             const Text(
                 "Register",
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
               ),
-              SizedBox(
+            const  SizedBox(
                 height: 10,
               ),
-              Text(
+            const  Text(
                 "Create an Account",
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.w200),
               ),
-              SizedBox(
+           const   SizedBox(
                 height: 10,
               ),
-              Text(
+            const  Text(
                 "startup space waits",
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.w200),
               ),
-              SizedBox(
+            const  SizedBox(
                 height: 20,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                const Text(
                     "Nombre",
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                   ),
-                  SizedBox(
+                const  SizedBox(
                     height: 4,
                   ),
                   SizedBox(
@@ -150,11 +149,11 @@ class RegisterScreen extends ConsumerWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                 const Text(
                     "Email",
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                   ),
-                  SizedBox(
+                 const SizedBox(
                     height: 4,
                   ),
                   SizedBox(
@@ -172,13 +171,13 @@ class RegisterScreen extends ConsumerWidget {
                       ))
                 ],
               ),
-              SizedBox(
+            const  SizedBox(
                 height: 20,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                 const Text(
                     "Password",
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                   ),
@@ -189,7 +188,8 @@ class RegisterScreen extends ConsumerWidget {
                       width: 320,
                       height: 60,
                       child: CustomTextInput(
-                        obscureText: false,
+                          
+                        obscureText: true,
                         hint: "Enter Password",
                         onChanged: (value) => ref
                             .read(registerformProvider.notifier)
@@ -242,7 +242,7 @@ class RegisterScreen extends ConsumerWidget {
                   ),
                   onPressed: () async{
                     if (registerForm.email.isValid &&
-                        registerForm.password.isValid||loading==false) {
+                        registerForm.password.isValid||loading==false||image!="") {
                             try {
     final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: registerForm.email.value,
@@ -259,7 +259,8 @@ class RegisterScreen extends ConsumerWidget {
        "inatablespace":false,
        "showUsers":false,
        "proyect":0,
-       "photo":image
+       "photo":image,
+       "email":registerForm.email.value
 
     });
     

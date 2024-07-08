@@ -8,7 +8,7 @@ class ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xff313131),
+      backgroundColor: Colors.black.withOpacity(0.8),
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection("users")

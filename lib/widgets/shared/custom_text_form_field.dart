@@ -142,10 +142,10 @@ class CustomTextInput extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
-                 obscureText: obscureText,
+              maxLines: obscureText ? 1 : null,
                 enabled: enabled,
                 controller: controller,
-                maxLines: null,
+           obscureText: obscureText,
                 onChanged: onChanged,
                 style: const TextStyle(fontSize: 20, color: Colors.black54),
                 keyboardType: numericKeyboard

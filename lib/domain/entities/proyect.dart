@@ -1,4 +1,5 @@
 class Proyect {
+  final DateTime date;
   final String docid;
   final String id;
   final String chose;
@@ -14,7 +15,8 @@ class Proyect {
 
   Proyect(
       {
-      required this.docid,  
+      required this.date,
+      required this.docid,
       required this.id,
       required this.chose,
       required this.descrition,
