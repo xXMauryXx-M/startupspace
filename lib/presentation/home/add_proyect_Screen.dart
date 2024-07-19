@@ -270,7 +270,7 @@ class AddProyectScreen extends ConsumerWidget {
                                 .update((state) => true);
                             ref
                                 .read(choseProvider.notifier)
-                                .update((state) => "Startup");
+                                .update((state) => "startup");
                             // Acción a realizar cuando se presione el botón
                           },
                           style: TextButton.styleFrom(

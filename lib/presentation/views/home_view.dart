@@ -346,7 +346,7 @@ class NewProyects extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 400,
       height: 120,
       child: Swiper(
@@ -407,13 +407,22 @@ class NewProyects extends StatelessWidget {
                                         fontWeight: FontWeight.w600,
                                         fontSize: 20),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 4.0),
-                                    child: Text(
-                                      "${d["proyectDescription"]}",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
+      
+ Padding(
+  padding: const EdgeInsets.only(top: 4.0),
+  child: Row(
+    children: [
+      Flexible(
+        child: Text(
+          "${d["proyectDescription"]}",
+          style: TextStyle(color: Colors.white),
+          maxLines: 2, // Limita el texto a una sola línea
+          overflow: TextOverflow.ellipsis, // Agrega puntos suspensivos al final si el texto es demasiado largo
+        ),
+      ),
+    ],
+  ),
+),                      
                                 ],
                               ),
                             ),

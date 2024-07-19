@@ -4,11 +4,17 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>Startupspace Necesita Acceder a las fotos</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Startupspace Necesita Acceder a la camara</string>
+	
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>Startupspace</string>
 	<key>CFBundleExecutable</key>
+	
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>

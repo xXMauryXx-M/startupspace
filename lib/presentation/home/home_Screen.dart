@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:startupspace/presentation/views/events_view.dart';
@@ -42,7 +44,7 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: SizedBox(
-        height: 70, // Ajusta la altura según sea necesario
+        height: Platform.isIOS ? 110.0 : 70.0, // Ajusta la altura según sea necesario
         child: CustomBottomNavigation(currentIndex: pageIndex),
       ),
       body: IndexedStack(

@@ -224,7 +224,7 @@ class LoginScreen extends ConsumerWidget {
                   child: const Text(
                     "Login",
                     style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
                   )),

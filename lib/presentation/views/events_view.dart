@@ -11,6 +11,7 @@ final resutProvider = StateProvider<ScanResult>((ref) => ScanResult(rawContent: 
 final rowProvider = StateProvider<String>((ref) => '');
 final namecolectionProvider = StateProvider<String>((ref) => "");
 
+
 class EventsView extends ConsumerWidget {
   const EventsView({super.key});
 
@@ -72,7 +73,11 @@ class EventsView extends ConsumerWidget {
     }
 
     Future<void> _endMeeting() async {
-      final assistants = await FirebaseFirestore.instance.collection(colection).get();
+      if (colection.isEmpty) {
+        throw AssertionError('El nombre de la colección no puede estar vacío.');
+      }
+
+      final assistants = await FirebaseFirestore.instance.collectionGroup(colection).get();
 
       for (var doc in assistants.docs) {
         final uid = doc.data()["uid"];

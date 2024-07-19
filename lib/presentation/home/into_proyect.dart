@@ -93,10 +93,16 @@ class IntoProyect extends ConsumerWidget {
                     SizedBox(
                       height: 30,
                     ),
+                    proyec.web!=""?
+                      ElevatedButton(
+                            onPressed: () => launchUrls(Uri.parse(proyec.web)),
+                            child: Text('Probar >'),
+                          )
+                          :
                     url != ""
                         ? ElevatedButton(
                             onPressed: () => launchUrls(Uri.parse(url)),
-                            child: Text('Probar >'),
+                            child: Text('Probar >',),
                           )
                         : ElevatedButton(
                             onPressed: () => {},

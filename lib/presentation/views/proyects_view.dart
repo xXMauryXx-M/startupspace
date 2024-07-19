@@ -184,7 +184,7 @@ class ProyectsView extends ConsumerWidget {
                                     .update((state) => project);
                               },
                               child: Container(
-                                height: 100,
+                                height: 119,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Colors.white,
@@ -251,18 +251,18 @@ class ProyectsView extends ConsumerWidget {
                                     Positioned(
                                       top: 9,
                                       right: 9,
-                                      child: project.chose == "Startup"
-                                          ? Icon(
+                                      child: project.chose == "startup"
+                                          ?const Icon(
                                               Icons.rocket,
                                               color: Colors.white,
                                             )
                                           : project.chose == "idea"
-                                              ? Icon(
+                                              ?  const Icon(
                                                   Icons.lightbulb,
                                                   color: Colors.white,
                                                 )
                                               : project.chose == "prototipo"
-                                                  ? Icon(
+                                                  ?  const Icon(
                                                       Icons.work,
                                                       color: Colors.white,
                                                     )

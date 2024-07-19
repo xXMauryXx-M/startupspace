@@ -242,7 +242,7 @@ class RegisterScreen extends ConsumerWidget {
                   ),
                   onPressed: () async{
                     if (registerForm.email.isValid &&
-                        registerForm.password.isValid||loading==false||image!="") {
+                        registerForm.password.isValid&&loading==false&&image!="") {
                             try {
     final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: registerForm.email.value,
