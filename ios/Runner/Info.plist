@@ -5,9 +5,9 @@
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
-    <string>Startupspace Necesita Acceder a las fotos</string>
+    <string>La aplicación requiere acceso a tu biblioteca de fotos para que puedas seleccionar imágenes para adjuntar a tus proyectos.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Startupspace Necesita Acceder a la camara</string>
+	<string>Startupspace Necesita Acceder a la camara para poder capturar una foto de perfil</string>
 	
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>

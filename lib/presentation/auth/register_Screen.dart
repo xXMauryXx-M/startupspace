@@ -21,11 +21,12 @@ final nameProvider = StateProvider<String>((ref) {
 });
 
 final emailProvider = StateProvider<String>((ref) {
-  return "" ;
+  return "";
 });
 final passwordProvider = StateProvider<String>((ref) {
-  return "" ;
+  return "";
 });
+
 class RegisterScreen extends ConsumerWidget {
   const RegisterScreen({super.key});
 
@@ -35,6 +36,7 @@ class RegisterScreen extends ConsumerWidget {
     final image = ref.watch(imageUrlProvider);
     final loading = ref.watch(isLoadingProvider);
     final name = ref.watch(nameProvider);
+    const  urlPhotoEmpty = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(),
@@ -97,35 +99,35 @@ class RegisterScreen extends ConsumerWidget {
                                 image,
                               ),
                             )),
-             const Text(
+              const Text(
                 "Register",
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
               ),
-            const  SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-            const  Text(
+              const Text(
                 "Create an Account",
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.w200),
               ),
-           const   SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-            const  Text(
+              const Text(
                 "startup space waits",
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.w200),
               ),
-            const  SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                const Text(
+                  const Text(
                     "Nombre",
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                   ),
-                const  SizedBox(
+                  const SizedBox(
                     height: 4,
                   ),
                   SizedBox(
@@ -149,11 +151,11 @@ class RegisterScreen extends ConsumerWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                 const Text(
+                  const Text(
                     "Email",
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                   ),
-                 const SizedBox(
+                  const SizedBox(
                     height: 4,
                   ),
                   SizedBox(
@@ -171,13 +173,13 @@ class RegisterScreen extends ConsumerWidget {
                       ))
                 ],
               ),
-            const  SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                 const Text(
+                  const Text(
                     "Password",
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                   ),
@@ -188,7 +190,6 @@ class RegisterScreen extends ConsumerWidget {
                       width: 320,
                       height: 60,
                       child: CustomTextInput(
-                          
                         obscureText: true,
                         hint: "Enter Password",
                         onChanged: (value) => ref
@@ -240,44 +241,46 @@ class RegisterScreen extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  onPressed: () async{
+                  onPressed: () async {
                     if (registerForm.email.isValid &&
-                        registerForm.password.isValid&&loading==false&&image!="") {
-                            try {
-    final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: registerForm.email.value,
-      password: registerForm.password.value,
-    );
-    
-    // Obtén el UID del usuario recién creado
-    String uid = credential.user!.uid;
-    
-    // Crea el documento en Firestore con el UID como ID del documento
-    await FirebaseFirestore.instance.collection("users").doc(uid).set({
-       "name": name,
-       "colaboration" :0,
-       "inatablespace":false,
-       "showUsers":false,
-       "proyect":0,
-       "photo":image,
-       "email":registerForm.email.value
+                        registerForm.password.isValid &&
+                        loading == false ) {
+                      try {
+                        final credential = await FirebaseAuth.instance
+                            .createUserWithEmailAndPassword(
+                          email: registerForm.email.value,
+                          password: registerForm.password.value,
+                        );
 
-    });
-    
-  
-  } on FirebaseAuthException catch (e) {
-    if (e.code == 'weak-password') {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Contraseña muy débil")));
-    } else if (e.code == 'email-already-in-use') {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("La Cuenta ya existe")));
-    }
-  } catch (e) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text("Error del servidor: $e")));
-  }
-  // throw Exception('Error inesperado');
+                        // Obtén el UID del usuario recién creado
+                        String uid = credential.user!.uid;
+
+                        // Crea el documento en Firestore con el UID como ID del documento
+                        await FirebaseFirestore.instance
+                            .collection("users")
+                            .doc(uid)
+                            .set({
+                          "name": name,
+                          "colaboration": 0,
+                          "inatablespace": false,
+                          "showUsers": false,
+                          "proyect": 0,
+                          "photo": image.isEmpty?urlPhotoEmpty:image,
+                          "email": registerForm.email.value
+                        });
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'weak-password') {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Contraseña muy débil")));
+                        } else if (e.code == 'email-already-in-use') {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("La Cuenta ya existe")));
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Error del servidor: $e")));
+                      }
+                      // throw Exception('Error inesperado');
                       // FirebaseFirestore.instance
                       //     .collection("users")
                       //     .add({"name": name, "photo": image})
@@ -297,7 +300,8 @@ class RegisterScreen extends ConsumerWidget {
                       //     .onFormSubmit(context);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Credenciales no Correctas o complete todo los campos'),
+                          content: Text(
+                              'Credenciales no Correctas o complete todo los campos'),
                           duration:
                               Duration(seconds: 3), // Duración del Snackbar
                         ),

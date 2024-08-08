@@ -1,19 +1,48 @@
 # startupspace
 
-A new Flutter project.
+ ## Descripción : Startupspace es una app diseñada para contribuir a startups emergentes, proporcionando una plataforma para colaboración y conocer nuevas startups.
+ 
+ ## Estado : startupspace app se encuentra en face MVP, en prueba abierta en play store y applestore  
 
-1: Buttom tabs: existe 2 uno que es el home
+ ## Descarga
+- [Descargar en Play Store](https://play.google.com/store/apps/details?id=com.startupspace.startupspace&pcampaignid=web_share)
+- [Descargar en App Store](https://apps.apple.com/cl/app/startupspace/id6532622797)
+
+## Tabla de Contenidos
+1. [Instalación](#instalación)
+2. [Uso](#uso)
+3. [Características](#características)
 
 
-que debemos hacer 
+## Instalación
+### Requisitos Previos
+- Flutter 2.5+
+- Dart 2.14+
+- Android Studio o Visual Studio Code (opcional, pero recomendado)
 
- 1: en el home necesitamos de escuchar costastemente los proyectos y mostrar el ultimo 
+### Instrucciones
+1. Clonar el repositorio:
+    ```bash
+    git clone https://github.com/xXMauryXx-M/startupspace.git
+    ```
+2. Navegar al directorio del proyecto:
+    ```bash
+    cd startupspace
+    ```
+3. Instalar las dependencias de Flutter y Dart:
+    ```bash
+    flutter pub get
+    ```
+4. Conectar un dispositivo o iniciar un emulador:
+    - Para Android Studio: Abrir AVD Manager y lanzar un emulador.
+    - Para Visual Studio Code: Usar el comando `Flutter: Launch Emulator`.
 
- 2: en proyectos , debe de de trarse todos los proyectos neuvos 
+5. Ejecutar la app:
+    ```bash
+    flutter run
+    ```
 
- 3: mostrar notificaciones el dia del evento 
 
- 4: mostrar notificaciones de otros evento 
-
- que pasas si sacamos el boton de meetup y lo llamamos lab , la cual lo que hara es sca
-
+    ## Características
+- Encuentra startup emergentes
+- Colabora con startups y entrega feedback.
