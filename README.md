@@ -2,7 +2,7 @@
 
  ## Descripción : Startupspace es una app diseñada para contribuir a startups emergentes, proporcionando una plataforma para colaboración y conocer nuevas startups.
  
- ## Estado : startupspace app se encuentra en face MVP, en prueba abierta en play store y applestore  
+ ## Estado : startupspace app se encuentra en face MVP, en prueba abierta en play store y appstore  
 
  ## Descarga
 - [Descargar en Play Store](https://play.google.com/store/apps/details?id=com.startupspace.startupspace&pcampaignid=web_share)
